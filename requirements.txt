@@ -1,13 +1,1 @@
-APScheduler
-cachetools
-certifi
-pip
 python-telegram-bot
-pytz
-pytz-deprecation-shim
-setuptools
-six
-tornado
-tzdata
-tzlocal
-wheel
