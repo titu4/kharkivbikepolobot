@@ -35,7 +35,7 @@ date = ""
 b_get_time = False
 time = ""
 b_once = False
-chat_id = "@polobottestchannel"
+# chat_id = "@polobottestchannel"
 group_id = "@P0LLoTestGroup"
 
 
@@ -206,7 +206,7 @@ def message_handler(update: Update, context: CallbackContext):
 
     if text[0] == "/":
         context.bot.send_message(
-            chat_id=group_id,
+            chat_id=update.effective_chat.id,
             text="ERROR: command not recognized")
 
 
