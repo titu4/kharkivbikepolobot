@@ -17,12 +17,6 @@ from telegram.ext import (
     MessageHandler,
 )
 
-alt_help_text = '''The following commands are available:\n\n
-                   /pw mm.dd mm.dd            create Mon-Sun poll\n
-                   /pt dddd mm.dd                 create training time poll\n
-                   /ta dddd mm.dd hh:mm  announce the training\n
-                   /sg group_id                        change group id'''
-
 help_text = "/help"
 poll_weekly_text = "/pw"
 poll_training_time_text = "/pt"
@@ -35,7 +29,6 @@ date = ""
 b_get_time = False
 time = ""
 b_once = False
-# chat_id = "@polobottestchannel"
 group_id = "@P0LLoTestGroup"
 
 
@@ -46,9 +39,9 @@ def set_group_id_handler(update: Update, context: CallbackContext):
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="ERROR: group_id not changed\n" +
-                 "group_id=" +
-                 group_id + "\n" +
-                 "parm1 is empty")
+                 "group_id=" + group_id + "\n" +
+                 "parm1 is empty"
+        )
     else:
         group_id = "@" + update.message.text.split(" ")[1]
         context.bot.send_message(chat_id=update.effective_chat.id, text="group_id="+group_id)
@@ -62,10 +55,11 @@ def poll_weekly_handler(update: Update, context: CallbackContext):
     if parm_num < 2:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text='''ERROR: poll not created,\n
-                    at least 2 parameters are required:\n
-                    parm1 - date start (dd.mm)\n
-                    parm2 - date finish (dd.mm)''')
+            text="ERROR: poll not created,\n" +
+                 "at least 2 parameters are required:\n" +
+                 "parm1 - date start (dd.mm)\n" +
+                 "parm2 - date finish (dd.mm)"
+        )
     else:
         date_start = parms[1]
         date_finish = parms[2]
@@ -98,10 +92,11 @@ def poll_training_time_handler(update: Update, context: CallbackContext):
     if parm_num < 2:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text='''ERROR: poll not created,\n
-                    at least 2 parameters are required:\n
-                    parm1 - day (dddd)\n
-                    parm2 - date (dd.mm)''')
+            text="ERROR: poll not created,\n" +
+                 "at least 2 parameters are required:\n" +
+                 "parm1 - day (dddd)\n" +
+                 "parm2 - date (dd.mm)"
+        )
     else:
         parm_day = parms[1]
         parm_date = parms[2]
@@ -139,11 +134,11 @@ def help_handler(update: Update, context: CallbackContext):
     """
 
     update.message.reply_text(
-        text='''The following commands are available:\n\n
-                /pw date date        create Mon-Sun poll\n
-                /pt day date           create training time poll\n
-                /ta day date time  announce the training\n
-                /sg group_id           change group id'''
+        text="The following commands are available:\n\n" +
+             "/pw date date        create Mon-Sun poll\n" +
+             "/pt day date           create training time poll\n" +
+             "/ta day date time  announce the training\n" +
+             "/sg group_id           change group id"
     )
 
 
@@ -155,11 +150,12 @@ def training_announcement_handler(update: Update, context: CallbackContext):
     if parm_num < 3:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text='''ERROR: announcement not created,\n
-                    at least 3 parameters are required:\n
-                    parm1 - day\n
-                    parm2 - date (dd.mm)\n
-                    parm3 - time (hh:mm)''')
+            text="ERROR: announcement not created,\n" +
+                 "at least 3 parameters are required:\n" +
+                 "parm1 - day\n" +
+                 "parm2 - date (dd.mm)\n" +
+                 "parm3 - time (hh:mm)"
+        )
     else:
 
         parm_day = parms[1]
@@ -171,7 +167,8 @@ def training_announcement_handler(update: Update, context: CallbackContext):
             text="[Тренировка]\n\n" +
                  "Когда: " + parm_day + ", " + parm_date + " " + parm_time + "\n" +
                  "Где: https://g.co/kgs/YowiUL\n" +
-                 "Будет: да")
+                 "Будет: да"
+        )
 
 
 def message_handler(update: Update, context: CallbackContext):
@@ -180,7 +177,8 @@ def message_handler(update: Update, context: CallbackContext):
     if user['id'] not in allowed_users:
         context.bot.send_message(
             text="ERROR: you are not allowed to use this bot\n" +
-                 "please contact the creator (@OhManIAmWorried)")
+                 "please contact the creator (@OhManIAmWorried)"
+        )
         return False
 
     text = update.message.text.split(" ")[0]
