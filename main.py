@@ -122,7 +122,6 @@ def poll_training_time_handler(update: Update, context: CallbackContext):
             message.poll.id: {
                 "questions_2": options,
                 "message_id_2": message.message_id,
-                # "chat_id": update.effective_chat.id,
                 "chat_id": group_id,
                 "answers_2": 0,
             }
