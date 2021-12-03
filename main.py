@@ -134,6 +134,7 @@ def help_handler(update: Update, context: CallbackContext):
     """
 
     update.message.reply_text(
+        chat_id=update.effective_chat.id,
         text="The following commands are available:\n\n" +
              "/pw date date        create Mon-Sun poll\n" +
              "/pt day date           create training time poll\n" +
@@ -176,6 +177,7 @@ def message_handler(update: Update, context: CallbackContext):
     user = update.message.from_user
     if user['id'] not in allowed_users:
         context.bot.send_message(
+            chat_id=update.effective_chat.id,
             text="ERROR: you are not allowed to use this bot\n" +
                  "please contact the creator (@OhManIAmWorried)"
         )
@@ -200,7 +202,9 @@ def message_handler(update: Update, context: CallbackContext):
 
     if text[0] == "/":
         context.bot.send_message(
-            text="ERROR: command not recognized")
+            chat_id=update.effective_chat.id,
+            text="ERROR: command not recognized"
+        )
 
 
 def main():
