@@ -123,7 +123,7 @@ def poll_training_time_handler(update: Update, context: CallbackContext):
 
 def help_handler(update: Update, context: CallbackContext):
 
-    update.bot.send_message(
+    context.bot.send_message(
         chat_id=update.effective_chat.id,
         text="The following commands are available:\n\n" +
              "/pw date date        create Mon-Sun poll\n" +
@@ -166,7 +166,7 @@ def message_handler(update: Update, context: CallbackContext):
 
     user = update.message.from_user
     if user['id'] not in allowed_users:
-        context.message.reply_text(
+        update.message.reply_text(
             text="ERROR: you are not allowed to use this bot\n" +
                  "please contact the creator (@OhManIAmWorried)"
         )
@@ -190,7 +190,7 @@ def message_handler(update: Update, context: CallbackContext):
         return training_announcement_handler(update=update, context=context)
 
     if text[0] == "/":
-        context.message.reply_text(
+        update.message.reply_text(
             text="ERROR: command not recognized"
         )
 
