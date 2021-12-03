@@ -143,7 +143,7 @@ def training_announcement_handler(update: Update, context: CallbackContext):
             chat_id=update.effective_chat.id,
             text="ERROR: announcement not created,\n" +
                  "at least 3 parameters are required:\n" +
-                 "parm1 - day\n" +
+                 "parm1 - day (dddd)\n" +
                  "parm2 - date (dd.mm)\n" +
                  "parm3 - time (hh:mm)"
         )
