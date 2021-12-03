@@ -17,11 +17,18 @@ from telegram.ext import (
     MessageHandler,
 )
 
+alt_help_text = """The following commands are available:\n\n
+             "/pw mm.dd mm.dd            create Mon-Sun poll\n
+             "/pt dddd mm.dd                 create training time poll\n
+             "/ta dddd mm.dd hh:mm  announce the training\n
+             "/sg group_id                        change group id"""
+
 help_text = "/help"
-poll_weekly_text = "/poll_weekly"
-poll_training_time_text = "/poll_training_time"
-training_announcement_text = "/training_announcement"
-set_group_id_text = "/set_group_id"
+poll_weekly_text = "/pw"
+poll_training_time_text = "/pt"
+training_announcement_text = "/ta"
+set_group_id_text = "/sg"
+allowed_users = [319478839, 378399460]
 
 b_get_date = False
 date = ""
@@ -30,6 +37,7 @@ time = ""
 b_once = False
 chat_id = "@polobottestchannel"
 group_id = "@P0LLoTestGroup"
+
 
 def set_group_id_handler(update: Update, context: CallbackContext):
     global group_id
@@ -59,27 +67,27 @@ def poll_weekly_handler(update: Update, context: CallbackContext):
                  "parm1 - date start (dd.mm)\n" +
                  "parm2 - date finish (dd.mm)")
     else:
-       date_start = parms[1]
-       date_finish = parms[2]
+        date_start = parms[1]
+        date_finish = parms[2]
 
-       options = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье", "-"]
-       message = context.bot.send_poll(
-           group_id,
-           "[Планы] " + date_start + " - " + date_finish + " Тренировка",
-           options,
-           is_anonymous=False,
-           allows_multiple_answers=True,
-       )
-       #save data for later use
-       payload = {
-           message.poll.id: {
-               "questions_1": options,
-               "message_id_1": message.message_id,
-               "chat_id": group_id,
-               "answers_1": 0,
-           }
-       }
-       context.bot_data.update(payload)
+        options = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье", "-"]
+        message = context.bot.send_poll(
+            group_id,
+            "[Планы] " + date_start + " - " + date_finish + " Тренировка",
+            options,
+            is_anonymous=False,
+            allows_multiple_answers=True,
+        )
+
+        payload = {
+            message.poll.id: {
+                "questions_1": options,
+                "message_id_1": message.message_id,
+                "chat_id": group_id,
+                "answers_1": 0,
+            }
+        }
+        context.bot_data.update(payload)
 
 
 def poll_training_time_handler(update: Update, context: CallbackContext):
@@ -98,7 +106,7 @@ def poll_training_time_handler(update: Update, context: CallbackContext):
             text="ERROR: poll not created\n" +
                  "parm1 or parm2 is empty")
     else:
-        parm_day  = parms[1]
+        parm_day = parms[1]
         parm_date = parms[2]
         options = ["<=14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", ">=21:00", "-"]
 
@@ -106,8 +114,8 @@ def poll_training_time_handler(update: Update, context: CallbackContext):
             group_id,
             "[Тренировка] " + parm_day + " " + parm_date + " - Время сбора:",
             options,
-            is_anonymous = False,
-            allows_multiple_answers = True,
+            is_anonymous=False,
+            allows_multiple_answers=True,
         )
         # save data for later use
         payload = {
@@ -136,11 +144,10 @@ def help_handler(update: Update, context: CallbackContext):
 
     update.message.reply_text(
         text="The following commands are available:\n\n" +
-             "/poll_weekly dates - create Mon-Sun poll\n" +
-             "/poll_training_time day date - create training time poll\n" +
-             "/training_announcement day date time - announce the training\n" +
-             "/set_group_id group_id - change effective group id to parm1 value",
-        #reply_markup=reply_markup,
+             "/pw date date        create Mon-Sun poll\n" +
+             "/pt day date           create training time poll\n" +
+             "/ta day date time  announce the training\n" +
+             "/sg group_id           change group id",
     )
 
 
@@ -174,8 +181,7 @@ def training_announcement_handler(update: Update, context: CallbackContext):
 def message_handler(update: Update, context: CallbackContext):
 
     user = update.message.from_user
-    #print("userid: " + str(user['id']))
-    if (user['id'] != 319478839):
+    if user['id'] not in allowed_users:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="ERROR: you are not allowed to use this bot\n" +
@@ -185,19 +191,20 @@ def message_handler(update: Update, context: CallbackContext):
     text = update.message.text.split(" ")[0]
 
     if text == help_text:
-        return help_handler(update=update,context=context)
+        return help_handler(update=update, context=context)
 
     if text == poll_weekly_text:
-        return poll_weekly_handler(update=update,context=context)
+        return poll_weekly_handler(update=update, context=context)
 
     if text == poll_training_time_text:
-        return poll_training_time_handler(update=update,context=context)
+        return poll_training_time_handler(update=update, context=context)
 
     if text == set_group_id_text:
-        return set_group_id_handler(update=update,context=context)
+        return set_group_id_handler(update=update, context=context)
 
     if text == training_announcement_text:
-        return training_announcement_handler(update=update,context=context)
+        return training_announcement_handler(update=update, context=context)
+
 
 def main():
     print('Start')
@@ -213,7 +220,7 @@ def main():
 
     updater.start_polling()
     updater.idle()
-    #print(updater.bot.get_me())
+
 
 if __name__ == '__main__':
     main()
