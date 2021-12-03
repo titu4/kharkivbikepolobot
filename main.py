@@ -204,6 +204,11 @@ def message_handler(update: Update, context: CallbackContext):
     if text == training_announcement_text:
         return training_announcement_handler(update=update, context=context)
 
+    if text[0] == "/":
+        context.bot.send_message(
+            chat_id=group_id,
+            text="ERROR: command not recognized")
+
 
 def main():
     print('Start')
